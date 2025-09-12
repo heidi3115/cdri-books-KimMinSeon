@@ -1,22 +1,15 @@
-import './App.css'
-import styled from "@emotion/styled";
-
-const TestCss = styled.div`
-    border: 1px solid red;
-    background: gray;
-    padding: 10px;
-    color: #fff;
-`
-
+import Main from './pages/Main.tsx';
+import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 
 function App() {
-  return (
-    <>
-      <TestCss>
-       first commit
-      </TestCss>
-    </>
-  )
+    const queryClient = new QueryClient();
+    return (
+        <>
+            <QueryClientProvider client={queryClient}>
+                <Main />
+            </QueryClientProvider>
+        </>
+    );
 }
 
-export default App
+export default App;
