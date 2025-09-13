@@ -1,5 +1,5 @@
-const MyComponent = () => {
+const FavoritesPage = () => {
     return <div>찜목록</div>;
 };
 
-export default MyComponent;
+export default FavoritesPage;

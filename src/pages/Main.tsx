@@ -12,15 +12,15 @@ const Wrapper = styled.div`
 `;
 
 const Left = styled.div`
-    flex-grow: 1;
+    flex: 0 0 25%;
 `;
 
 const Right = styled.div`
-    flex-grow: 2;
+    flex: 0 0 50%;
 `;
 
 const Blank = styled.div`
-    flex-grow: 1;
+    flex: 0 0 25%;
 `;
 
 const Top = styled.div`
@@ -41,13 +41,8 @@ const ButtonGroup = styled.div`
 const Button = styled.button<{ isClicked: boolean }>`
     background: none;
     border-radius: 0;
+    border: none;
     border-bottom: ${(props) => (props.isClicked ? '1px solid blue' : 'none')};
-    :active {
-        border-style: none;
-    }
-    :hover {
-        border-style: none;
-    }
 `;
 
 const Bottom = styled.div``;
