@@ -86,6 +86,7 @@ const Item = styled.div`
         min-width: 0;
 
         > span {
+            align-content: center;
             display: block;
             overflow: hidden;
             text-overflow: ellipsis;
