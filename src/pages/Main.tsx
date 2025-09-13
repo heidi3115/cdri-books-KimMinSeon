@@ -34,7 +34,7 @@ const Title = styled.div`
     text-align: center;
 `;
 
-const ButtonGroup = styled.div`
+const TabGroup = styled.div`
     align-content: center;
 `;
 
@@ -42,7 +42,10 @@ const Button = styled.button<{ isClicked: boolean }>`
     background: none;
     border-radius: 0;
     border: none;
-    border-bottom: ${(props) => (props.isClicked ? '1px solid blue' : 'none')};
+    > span {
+        padding-bottom: 5px;
+        border-bottom: ${(props) => (props.isClicked ? '1px solid #4880EE' : 'none')};
+    }
 `;
 
 const Bottom = styled.div``;
@@ -57,14 +60,14 @@ const MyComponent = () => {
             </Left>
             <Right>
                 <Top>
-                    <ButtonGroup>
+                    <TabGroup>
                         <Button isClicked={tab === 'search'} onClick={() => setTab('search')}>
-                            도서검색
+                            <span>도서검색</span>
                         </Button>
                         <Button isClicked={tab === 'favorites'} onClick={() => setTab('favorites')}>
-                            내가 찜한 책
+                            <span>내가 찜한 책</span>
                         </Button>
-                    </ButtonGroup>
+                    </TabGroup>
                 </Top>
                 <Bottom>{tab === 'search' ? <SearchPage /> : <FavoritesPage />}</Bottom>
             </Right>

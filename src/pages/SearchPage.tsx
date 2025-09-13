@@ -65,13 +65,40 @@ const List = styled.div``;
 const Item = styled.div`
     > ul {
         display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        list-style: none;
+        padding-bottom: 5px;
+        border-bottom: 1px solid #d2d6da;
+    }
+
+    .left {
+        display: flex;
         gap: 10px;
         align-items: center;
-        border-bottom: 1px solid #d2d6da;
-        list-style: none;
-        flex-grow: 1;
+        overflow: hidden;
+        max-width: 600px;
+    }
+    .text-wrapper {
+        display: flex;
+        flex: 1;
+        min-width: 0;
+
+        > span {
+            display: block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+    .right {
+        display: flex;
+        gap: 8px;
+        align-items: center;
     }
 `;
+
 const ItemImg = styled.img`
     width: 48px;
     height: 68px;
@@ -131,15 +158,19 @@ const SearchPage = () => {
                                 return (
                                     <Item>
                                         <ul>
-                                            <li>
+                                            <li className="left">
                                                 <ItemImg src={it.thumbnail} />
+                                                <div className="text-wrapper">
+                                                    <ItemTitle>{it.title}</ItemTitle>
+                                                    <ItemAuthors>
+                                                        {it.authors.join(', ')}
+                                                    </ItemAuthors>
+                                                </div>
                                             </li>
-                                            <li>
-                                                <ItemTitle>{it.title}</ItemTitle>
-                                                <ItemAuthors>{it.authors.join(', ')}</ItemAuthors>
-                                            </li>
-                                            <li>
+                                            <li className="right">
                                                 <ItemTitle>{it.price.toLocaleString()}원</ItemTitle>
+                                                <button>구매하기</button>
+                                                <button>상세 보기</button>
                                             </li>
                                         </ul>
                                     </Item>
