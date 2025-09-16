@@ -126,7 +126,9 @@ const BookItem = ({ book }: { book: BookList }) => {
                         </Left>
                         <Right>
                             <ItemTitle>{book.price.toLocaleString()}원</ItemTitle>
-                            <button className="text-white">구매하기</button>
+                            <button className="text-white" onClick={() => window.open(book.url)}>
+                                구매하기
+                            </button>
                             <button onClick={toggle}>
                                 <span>상세보기</span>
                                 <KeyboardArrowDownIcon />
@@ -169,7 +171,12 @@ const BookItem = ({ book }: { book: BookList }) => {
                                         <ItemTitle>{book.sale_price.toLocaleString()}원</ItemTitle>
                                     </div>
                                 )}
-                                <BuyingButton className="text-white">구매하기</BuyingButton>
+                                <BuyingButton
+                                    className="text-white"
+                                    onClick={() => window.open(book.url)}
+                                >
+                                    구매하기
+                                </BuyingButton>
                             </PriceDataWrapper>
                         </Right>
                     </ul>

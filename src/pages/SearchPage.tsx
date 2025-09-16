@@ -33,6 +33,11 @@ const SearchBar = styled.div`
     }
 `;
 
+const BookCount = styled.div`
+    display: flex;
+    gap: 10px;
+`;
+
 const SearchBarInputWrapper = styled.div`
     position: relative;
     input {
@@ -98,18 +103,19 @@ const SearchPage = () => {
                 </SearchBarInputWrapper>
                 <button>상세검색</button>
             </SearchBar>
+            <BookCount>
+                <span>도서 검색 결과</span>
+                <span>
+                    총<ColoredText>{hasResults ? data.meta.total_count : 0}</ColoredText>건
+                </span>
+            </BookCount>
             <Contents hasResults={hasResults}>
                 {hasResults ? (
-                    <>
-                        <span>
-                            도서 검색 결과 총 <ColoredText>{data.meta.total_count}</ColoredText>건
-                        </span>
-                        <div>
-                            {data.documents.map((it: BookList) => {
-                                return <BookItem book={it} />;
-                            })}
-                        </div>
-                    </>
+                    <div>
+                        {data.documents.map((it: BookList) => {
+                            return <BookItem book={it} />;
+                        })}
+                    </div>
                 ) : (
                     <NoResults>
                         <img src={bookIcon} alt="책 아이콘" />
