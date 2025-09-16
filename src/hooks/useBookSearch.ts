@@ -7,7 +7,7 @@ export const useBookSearch = (query: string, page = 1, size = 10) => {
     return useQuery({
         queryKey: ['books', query, page, size],
         queryFn: async () => {
-            const res = await kakaoApi.get('/book', {
+            const res = await kakaoApi.get('/v3/search/book', {
                 params: { query, page, size },
             });
             return res.data;
