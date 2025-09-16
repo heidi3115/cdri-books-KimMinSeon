@@ -1,5 +1,9 @@
 import styled from '@emotion/styled';
 import bookIcon from '../assets/icon_book.png';
+import BookItem from './BookItem.tsx';
+import { getFavorites } from '../utils/favoriteStorage.ts';
+import type { BookList } from '../types/SearchDataTypes.ts';
+import { useEffect, useState } from 'react';
 
 const Wrapper = styled.div`
     margin-top: 50px;
@@ -46,7 +50,16 @@ const NoResults = styled.div`
 `;
 
 const FavoritesPage = () => {
-    const hasResults = false;
+    const [favorites, setFavorites] = useState([]);
+    const hasResults = favorites.length > 0;
+
+    useEffect(() => {
+        setFavorites(getFavorites());
+    }, []);
+
+    const handleChange = () => {
+        setFavorites(getFavorites());
+    };
 
     return (
         <Wrapper>
@@ -54,13 +67,15 @@ const FavoritesPage = () => {
             <BookCount>
                 <span>찜한 책 총</span>
                 <span>
-                    총<ColoredText>0</ColoredText>건
+                    총<ColoredText>{favorites.length}</ColoredText>건
                 </span>
             </BookCount>
             <Contents hasResults={hasResults}>
                 {hasResults ? (
                     <>
-                        <div></div>
+                        {favorites.map((it: BookList) => {
+                            return <BookItem book={it} key={it.isbn} handleChange={handleChange} />;
+                        })}
                     </>
                 ) : (
                     <NoResults>

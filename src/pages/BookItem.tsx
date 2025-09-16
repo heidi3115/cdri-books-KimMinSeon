@@ -5,7 +5,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import type { BookList } from '../types/SearchDataTypes.ts';
 import { Favorite, FavoriteBorder } from '@mui/icons-material';
 import { useEffect, useState } from 'react';
-import { getFavorites, isFavorite, toggleFavorite } from '../utils/favoriteStorage.ts';
+import { isFavorite, toggleFavorite } from '../utils/favoriteStorage.ts';
 
 const Item = styled.div`
     > ul {
@@ -131,7 +131,12 @@ const DividerLine = styled.div`
     border: 1px solid #d2d6da;
 `;
 
-const BookItem = ({ book }: { book: BookList }) => {
+type BookItemProps = {
+    book: BookList;
+    handleChange: () => void;
+};
+
+const BookItem = ({ book, handleChange }: BookItemProps) => {
     const [value, toggle] = useToggle(false);
     const [isFav, setIsFav] = useState(false);
 
@@ -142,9 +147,11 @@ const BookItem = ({ book }: { book: BookList }) => {
     const handleFavoriteClick = () => {
         const newFavorites = toggleFavorite(book);
         setIsFav(newFavorites);
-    };
 
-    console.log(getFavorites());
+        if (handleChange) {
+            handleChange();
+        }
+    };
 
     return (
         <Item>
