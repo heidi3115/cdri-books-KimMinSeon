@@ -3,6 +3,9 @@ import styled from '@emotion/styled';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import type { BookList } from '../types/SearchDataTypes.ts';
+import { Favorite, FavoriteBorder } from '@mui/icons-material';
+import { useEffect, useState } from 'react';
+import { getFavorites, isFavorite, toggleFavorite } from '../utils/favoriteStorage.ts';
 
 const Item = styled.div`
     > ul {
@@ -64,9 +67,30 @@ const Right = styled.li<{ isClicked?: boolean }>`
     }
 `;
 
+const Thumbnail = styled.div`
+    position: relative;
+    box-sizing: border-box;
+`;
 const ItemImg = styled.img<{ isClicked?: boolean }>`
     width: ${(props) => (props.isClicked ? '210px' : '48px')};
     height: ${(props) => (props.isClicked ? '280px' : '68px')};
+`;
+
+const FavoriteButton = styled.div<{ isClicked?: boolean }>`
+    position: absolute;
+    background: none;
+    width: 20px;
+    height: 17px;
+    top: 4%;
+    right: 5%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    > svg {
+        width: ${(props) => !props.isClicked && '13px'};
+        height: ${(props) => !props.isClicked && '12px'};
+        fill: red;
+    }
 `;
 
 const ItemTitle = styled.span<{ isCanceled?: boolean }>`
@@ -109,6 +133,18 @@ const DividerLine = styled.div`
 
 const BookItem = ({ book }: { book: BookList }) => {
     const [value, toggle] = useToggle(false);
+    const [isFav, setIsFav] = useState(false);
+
+    useEffect(() => {
+        setIsFav(isFavorite(book.isbn));
+    }, [book.isbn]);
+
+    const handleFavoriteClick = () => {
+        const newFavorites = toggleFavorite(book);
+        setIsFav(newFavorites);
+    };
+
+    console.log(getFavorites());
 
     return (
         <Item>
@@ -116,7 +152,14 @@ const BookItem = ({ book }: { book: BookList }) => {
                 <>
                     <ul>
                         <Left>
-                            <ItemImg src={book.thumbnail} />
+                            <Thumbnail>
+                                <ItemImg src={book.thumbnail} />
+                                {isFav && (
+                                    <FavoriteButton>
+                                        <Favorite />
+                                    </FavoriteButton>
+                                )}
+                            </Thumbnail>
                             <TextWrapper>
                                 <ItemTitle>{book.title}</ItemTitle>
                                 <ItemAuthors>{book.authors.join(', ')}</ItemAuthors>
@@ -139,7 +182,12 @@ const BookItem = ({ book }: { book: BookList }) => {
                 <>
                     <ul>
                         <Left>
-                            <ItemImg src={book.thumbnail} isClicked />
+                            <Thumbnail>
+                                <ItemImg src={book.thumbnail} isClicked />
+                                <FavoriteButton isClicked onClick={handleFavoriteClick}>
+                                    {isFav ? <Favorite /> : <FavoriteBorder />}
+                                </FavoriteButton>
+                            </Thumbnail>
                             <div>
                                 <TextWrapper>
                                     <ItemTitle>{book.title}</ItemTitle>
