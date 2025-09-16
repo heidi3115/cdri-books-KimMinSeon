@@ -84,7 +84,9 @@ const ItemAuthors = styled.span`
 
 const PriceDataWrapper = styled.div`
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-top: auto;
     gap: 5px;
 `;
 
@@ -97,8 +99,8 @@ const PriceText = styled.span`
 `;
 
 const BuyingButton = styled.button`
-    margin-top: auto;
     width: 240px;
+    margin-top: 20px;
 `;
 
 const DividerLine = styled.div`
@@ -155,18 +157,20 @@ const BookItem = ({ book }: { book: BookList }) => {
                                 <KeyboardArrowUpIcon />
                             </button>
                             <PriceDataWrapper>
-                                <PriceText>원가</PriceText>
-                                <ItemTitle isCanceled={book.sale_price > 0}>
-                                    {book.price.toLocaleString()}원
-                                </ItemTitle>
+                                <div>
+                                    <PriceText>원가</PriceText>
+                                    <ItemTitle isCanceled={book.sale_price > 0}>
+                                        {book.price.toLocaleString()}원
+                                    </ItemTitle>
+                                </div>
+                                {book.sale_price > 0 && (
+                                    <div>
+                                        <PriceText>할인가</PriceText>
+                                        <ItemTitle>{book.sale_price.toLocaleString()}원</ItemTitle>
+                                    </div>
+                                )}
+                                <BuyingButton className="text-white">구매하기</BuyingButton>
                             </PriceDataWrapper>
-                            {book.sale_price > 0 && (
-                                <PriceDataWrapper>
-                                    <PriceText>할인가</PriceText>
-                                    <ItemTitle>{book.sale_price.toLocaleString()}원</ItemTitle>
-                                </PriceDataWrapper>
-                            )}
-                            <BuyingButton className="text-white">구매하기</BuyingButton>
                         </Right>
                     </ul>
                     <DividerLine />
