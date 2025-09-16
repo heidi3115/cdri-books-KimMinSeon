@@ -5,6 +5,7 @@ import type { BookList } from '../types/SearchDataTypes.ts';
 import bookIcon from '../assets/icon_book.png';
 import SearchIcon from '../assets/SearchIcon.tsx';
 import BookItem from './BookItem.tsx';
+import { Pagination, Stack } from '@mui/material';
 
 const Wrapper = styled.div`
     margin-top: 50px;
@@ -82,9 +83,19 @@ const NoResults = styled.div`
     align-items: center;
 `;
 
+const StyledStack = styled(Stack)`
+    margin: 0 auto;
+`;
+
+const PAGE_SIZE = 10;
+
 const SearchPage = () => {
     const [search, setSearch] = useState('');
-    const { data } = useBookSearch(search);
+    const [page, setPage] = useState(1);
+    const handleChange = (_, value: number) => {
+        setPage(value);
+    };
+    const { data } = useBookSearch(search, page, PAGE_SIZE);
     const hasResults = data && data.documents.length > 0;
 
     const onKeyDown = (e) => {
@@ -123,6 +134,16 @@ const SearchPage = () => {
                     </NoResults>
                 )}
             </Contents>
+            {data && data.meta.total_count > 0 && (
+                <StyledStack spacing={2}>
+                    <Pagination
+                        count={Math.ceil(data.meta.total_count / PAGE_SIZE)}
+                        page={page}
+                        shape="rounded"
+                        onChange={handleChange}
+                    />
+                </StyledStack>
+            )}
         </Wrapper>
     );
 };

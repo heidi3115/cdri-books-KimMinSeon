@@ -110,8 +110,6 @@ const DividerLine = styled.div`
 const BookItem = ({ book }: { book: BookList }) => {
     const [value, toggle] = useToggle(false);
 
-    console.log(book, '북');
-
     return (
         <Item>
             {!value ? (
