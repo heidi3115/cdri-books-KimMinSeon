@@ -19,6 +19,7 @@ type BookList = {
     title: string;
     translators: string[];
     url: string;
+    contents: string;
 };
 
 export type { BookList, BookData };

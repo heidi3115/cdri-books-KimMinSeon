@@ -8,18 +8,13 @@ const Item = styled.div`
     > ul {
         display: flex;
         justify-content: space-between;
-        align-items: center;
-        gap: 10px;
         list-style: none;
-        padding-bottom: 5px;
-        border-bottom: 1px solid #d2d6da;
     }
 `;
 
 const Left = styled.li`
     display: flex;
     gap: 10px;
-    align-items: center;
     overflow: hidden;
     max-width: 600px;
 `;
@@ -38,11 +33,15 @@ const TextWrapper = styled.div`
     }
 `;
 
-const Right = styled.li`
-    display: flex;
-    gap: 8px;
-    align-items: center;
+const BookText = styled.div`
+    margin: 0 10px;
+`;
 
+const Right = styled.li<{ isClicked?: boolean }>`
+    display: flex;
+    flex-direction: ${(props) => (props.isClicked ? 'column' : 'row')};
+    gap: 8px;
+    align-items: ${(props) => (props.isClicked ? 'flex-end' : 'center')};
     button {
         color: #6d7582;
         padding: 13px 20px;
@@ -51,7 +50,7 @@ const Right = styled.li`
         align-items: center;
         justify-content: center;
         height: 48px;
-        //gap: 4px;
+        gap: 4px;
         border: none;
     }
 
@@ -65,62 +64,113 @@ const Right = styled.li`
     }
 `;
 
-const ItemImg = styled.img<{ isClicked: boolean }>`
-    background: red;
-    width: ${(props) => (props.isClicked ? '148px' : '48px')};
-    height: ${(props) => (props.isClicked ? '148px' : '68px')};
+const ItemImg = styled.img<{ isClicked?: boolean }>`
+    width: ${(props) => (props.isClicked ? '210px' : '48px')};
+    height: ${(props) => (props.isClicked ? '280px' : '68px')};
 `;
-const ItemTitle = styled.span`
+
+const ItemTitle = styled.span<{ isCanceled?: boolean }>`
     font-size: 18px;
-    font-weight: bold;
+    font-weight: ${(props) => (props.isCanceled ? '500' : '700')};
+    text-decoration: ${(props) => (props.isCanceled ? 'line-through' : 'none')};
+    color: ${(props) => props.isCanceled && '#353C49'};
     margin: 0 10px;
 `;
+
 const ItemAuthors = styled.span`
     color: #6d7582;
     font-size: 15px;
 `;
 
+const PriceDataWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 5px;
+`;
+
+const PriceText = styled.span`
+    display: inline-block;
+    font-size: 10px;
+    color: #8d94a0;
+    width: 37px;
+    text-align: right;
+`;
+
+const BuyingButton = styled.button`
+    margin-top: auto;
+    width: 240px;
+`;
+
+const DividerLine = styled.div`
+    border: 1px solid #d2d6da;
+`;
+
 const BookItem = ({ book }: { book: BookList }) => {
     const [value, toggle] = useToggle(false);
+
+    console.log(book, '북');
 
     return (
         <Item>
             {!value ? (
-                <ul>
-                    <Left>
-                        <ItemImg src={book.thumbnail} isClicked={false} />
-                        <TextWrapper>
-                            <ItemTitle>{book.title}</ItemTitle>
-                            <ItemAuthors>{book.authors.join(', ')}</ItemAuthors>
-                        </TextWrapper>
-                    </Left>
-                    <Right>
-                        <ItemTitle>{book.price.toLocaleString()}원</ItemTitle>
-                        <button className="text-white">구매하기</button>
-                        <button onClick={toggle}>
-                            <span>상세보기</span>
-                            <KeyboardArrowDownIcon />
-                        </button>
-                    </Right>
-                </ul>
+                <>
+                    <ul>
+                        <Left>
+                            <ItemImg src={book.thumbnail} />
+                            <TextWrapper>
+                                <ItemTitle>{book.title}</ItemTitle>
+                                <ItemAuthors>{book.authors.join(', ')}</ItemAuthors>
+                            </TextWrapper>
+                        </Left>
+                        <Right>
+                            <ItemTitle>{book.price.toLocaleString()}원</ItemTitle>
+                            <button className="text-white">구매하기</button>
+                            <button onClick={toggle}>
+                                <span>상세보기</span>
+                                <KeyboardArrowDownIcon />
+                            </button>
+                        </Right>
+                    </ul>
+                    <DividerLine />
+                </>
             ) : (
-                <ul>
-                    <Left>
-                        <ItemImg src={book.thumbnail} isClicked={true} />
-                        <TextWrapper>
-                            <ItemTitle>{book.title}</ItemTitle>
-                            <ItemAuthors>{book.authors.join(', ')}</ItemAuthors>
-                        </TextWrapper>
-                    </Left>
-                    <Right>
-                        <ItemTitle>{book.price.toLocaleString()}원</ItemTitle>
-                        <button className="text-white">구매하기</button>
-                        <button onClick={toggle}>
-                            <span>상세보기</span>
-                            <KeyboardArrowUpIcon />
-                        </button>
-                    </Right>
-                </ul>
+                <>
+                    <ul>
+                        <Left>
+                            <ItemImg src={book.thumbnail} isClicked />
+                            <div>
+                                <TextWrapper>
+                                    <ItemTitle>{book.title}</ItemTitle>
+                                    <ItemAuthors>{book.authors.join(', ')}</ItemAuthors>
+                                </TextWrapper>
+                                <BookText>
+                                    <p>책 소개</p>
+                                    <span>{book.contents}</span>
+                                </BookText>
+                            </div>
+                        </Left>
+                        <Right isClicked>
+                            <button onClick={toggle}>
+                                <span>상세보기</span>
+                                <KeyboardArrowUpIcon />
+                            </button>
+                            <PriceDataWrapper>
+                                <PriceText>원가</PriceText>
+                                <ItemTitle isCanceled={book.sale_price > 0}>
+                                    {book.price.toLocaleString()}원
+                                </ItemTitle>
+                            </PriceDataWrapper>
+                            {book.sale_price > 0 && (
+                                <PriceDataWrapper>
+                                    <PriceText>할인가</PriceText>
+                                    <ItemTitle>{book.sale_price.toLocaleString()}원</ItemTitle>
+                                </PriceDataWrapper>
+                            )}
+                            <BuyingButton className="text-white">구매하기</BuyingButton>
+                        </Right>
+                    </ul>
+                    <DividerLine />
+                </>
             )}
         </Item>
     );
