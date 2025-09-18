@@ -56,7 +56,7 @@ const StyledStack = styled(Stack)`
 `;
 
 const FavoritesPage = () => {
-    const [favorites, setFavorites] = useState([]);
+    const [favorites, setFavorites] = useState<BookList[]>([]);
     const [page, setPage] = useState(1);
 
     // 찜목록을 PAGE_SIZE로 나누어 pagination 처리
