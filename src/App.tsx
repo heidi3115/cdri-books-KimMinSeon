@@ -1,22 +1,28 @@
-import './App.css'
-import styled from "@emotion/styled";
+import Main from './pages/Main.tsx';
+import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
+import { css, Global } from '@emotion/react';
 
-const TestCss = styled.div`
-    border: 1px solid red;
-    background: gray;
-    padding: 10px;
-    color: #fff;
-`
-
+const GlobalStyles = css`
+    input:focus,
+    button:focus,
+    textarea:focus {
+        outline: none;
+    }
+    .MuiPopover-paper {
+        box-shadow: 0 0 14px 6px #97979726 !important;
+    }
+`;
 
 function App() {
-  return (
-    <>
-      <TestCss>
-       first commit
-      </TestCss>
-    </>
-  )
+    const queryClient = new QueryClient();
+    return (
+        <>
+            <Global styles={GlobalStyles} />
+            <QueryClientProvider client={queryClient}>
+                <Main />
+            </QueryClientProvider>
+        </>
+    );
 }
 
-export default App
+export default App;
