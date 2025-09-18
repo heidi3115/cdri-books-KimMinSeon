@@ -1,4 +1,4 @@
-import { cloneElement, type ReactElement, type ReactNode, useState } from 'react';
+import { cloneElement, type ReactElement, type ReactNode, type MouseEvent, useState } from 'react';
 import { MenuItem, Popover, TextField } from '@mui/material';
 import styled from '@emotion/styled';
 import CloseIcon from '@mui/icons-material/Close';
@@ -32,12 +32,14 @@ const CloseButton = styled.div`
     top: 5px;
     right: 5px;
     background: none;
+
     button {
         color: #b1b8c0;
         border: none;
         background: none;
         padding: 0;
     }
+
     svg {
         width: 20px;
         height: 20px;
@@ -47,6 +49,7 @@ const CloseButton = styled.div`
 const ChildrenWrapper = styled.div`
     display: flex;
     gap: 10px;
+
     input {
         border-bottom: 1px solid pink;
     }
@@ -83,14 +86,14 @@ const CommonPopOver = ({
     isShowButton = true,
     returnFunction,
 }: PopoverProps) => {
-    const [anchorEl, setAnchorEl] = useState(null);
+    const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
 
     const [selectedTarget, setSelectedTarget] = useState('title');
     const [searchText, setSearchText] = useState('');
 
-    const handleClick = (e) => {
+    const handleClick = (e: MouseEvent<HTMLElement>) => {
         setAnchorEl(e.currentTarget);
     };
     const handleClose = () => {
@@ -98,7 +101,9 @@ const CommonPopOver = ({
     };
     return (
         <div>
-            {cloneElement(trigger, { onClick: handleClick })}
+            {cloneElement(trigger as ReactElement<any>, {
+                onClick: (e: MouseEvent<HTMLElement>) => handleClick(e),
+            })}
             <Popover
                 id={id}
                 open={open}
