@@ -5,6 +5,7 @@ import { getFavorites } from '../utils/favoriteStorage.ts';
 import type { BookList } from '../types/SearchDataTypes.ts';
 import { useEffect, useState } from 'react';
 import { Pagination, Stack } from '@mui/material';
+import { PAGE_SIZE } from '../constants/commonConstants.ts';
 
 const Wrapper = styled.div`
     margin-top: 50px;
@@ -53,8 +54,6 @@ const NoResults = styled.div`
 const StyledStack = styled(Stack)`
     margin: 0 auto;
 `;
-
-const PAGE_SIZE = 10;
 
 const FavoritesPage = () => {
     const [favorites, setFavorites] = useState([]);

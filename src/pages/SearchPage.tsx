@@ -13,6 +13,7 @@ import {
     deleteSearchHistory,
 } from '../utils/searchHistoryStorage.ts';
 import CommonPopOver from '../components/CommonPopOver.tsx';
+import { PAGE_SIZE } from '../constants/commonConstants.ts';
 
 type ReturnFunctionProps = {
     selectedTarget: string;
@@ -125,8 +126,6 @@ const StyledStack = styled(Stack)`
     margin: 0 auto;
 `;
 
-const PAGE_SIZE = 10;
-
 const SearchPage = () => {
     const inputRef = useRef<HTMLInputElement | null>(null);
     const [search, setSearch] = useState('');
@@ -151,6 +150,12 @@ const SearchPage = () => {
             setSearchHistory(getSearchHistory());
         }
     };
+
+    const addHistory = (it: string) => {
+        addSearchHistory(it);
+        setSearchHistory(getSearchHistory());
+    };
+
     const onClickCloseButton = (it: string) => {
         deleteSearchHistory(it);
         setSearchHistory(getSearchHistory());
@@ -178,34 +183,31 @@ const SearchPage = () => {
                     />
                     {isOpenHistory && (
                         <div>
-                            {searchHistory.map((it: string) => {
-                                return (
-                                    <SearchList>
-                                        <span
+                            {searchHistory.map((it: string) => (
+                                <SearchList key={it}>
+                                    <span
+                                        onMouseDown={(e) => {
+                                            e.preventDefault();
+                                            setInputValue(it);
+                                            setSearch(it);
+                                            setIsOpenHistory(false);
+                                            addHistory(it);
+
+                                            inputRef.current?.blur();
+                                        }}
+                                    >
+                                        {it}
+                                    </span>
+                                    <span>
+                                        <CloseIcon
                                             onMouseDown={(e) => {
                                                 e.preventDefault();
-                                                setInputValue(it);
-                                                setSearch(it);
-                                                setIsOpenHistory(false);
-                                                addSearchHistory(it);
-                                                setSearchHistory(getSearchHistory());
-
-                                                inputRef.current?.blur();
+                                                onClickCloseButton(it);
                                             }}
-                                        >
-                                            {it}
-                                        </span>
-                                        <span>
-                                            <CloseIcon
-                                                onMouseDown={(e) => {
-                                                    e.preventDefault();
-                                                    onClickCloseButton(it);
-                                                }}
-                                            />
-                                        </span>
-                                    </SearchList>
-                                );
-                            })}
+                                        />
+                                    </span>
+                                </SearchList>
+                            ))}
                         </div>
                     )}
                 </SearchBarInputWrapper>
