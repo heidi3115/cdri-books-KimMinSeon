@@ -114,6 +114,7 @@ const SearchPage = () => {
     const [page, setPage] = useState(1);
     const [searchHistory, setSearchHistory] = useState(getSearchHistory());
     const [isOpenHistory, setIsOpenHistory] = useState(false);
+    const [inputValue, setInputValue] = useState('');
 
     const handleChange = (_: any, value: number) => {
         setPage(value);
@@ -123,9 +124,9 @@ const SearchPage = () => {
 
     const onKeyDown = (e: any) => {
         if (e.key === 'Enter') {
-            setSearch(e.target.value);
+            setSearch(inputValue);
             setIsOpenHistory(false);
-            addSearchHistory(e.target.value);
+            addSearchHistory(inputValue);
             setSearchHistory(getSearchHistory());
         }
     };
@@ -143,15 +144,28 @@ const SearchPage = () => {
                     <input
                         placeholder="검색어를 입력하세요"
                         onKeyDown={onKeyDown}
+                        value={inputValue}
                         onFocus={() => setIsOpenHistory(true)}
                         onBlur={() => setIsOpenHistory(false)}
+                        onChange={(e) => setInputValue(e.target.value)}
                     />
                     {isOpenHistory && (
                         <div>
                             {searchHistory.map((it: string) => {
                                 return (
                                     <SearchList>
-                                        <span>{it}</span>
+                                        <span
+                                            onMouseDown={(e) => e.preventDefault()}
+                                            onClick={() => {
+                                                setInputValue(it);
+                                                setSearch(it);
+                                                setIsOpenHistory(false);
+                                                addSearchHistory(it);
+                                                setSearchHistory(getSearchHistory());
+                                            }}
+                                        >
+                                            {it}
+                                        </span>
                                         <span>
                                             <CloseIcon
                                                 onMouseDown={(e) => {
