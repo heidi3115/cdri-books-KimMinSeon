@@ -1,10 +1,10 @@
 import { useBookSearch } from '../hooks/useBookSearch.ts';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import styled from '@emotion/styled';
 import type { BookList } from '../types/SearchDataTypes.ts';
 import bookIcon from '../assets/icon_book.png';
 import SearchIcon from '../assets/SearchIcon.tsx';
-import BookItem from './BookItem.tsx';
+import BookItem from '../components/BookItem.tsx';
 import { Pagination, Stack } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import {
@@ -34,7 +34,7 @@ const Title = styled.div`
 const SearchBar = styled.div`
     display: flex;
     gap: 10px;
-    align-items: center;
+    align-items: baseline;
     > button {
         background: none;
         border: 1px solid #8d94a0;
@@ -70,7 +70,14 @@ const SearchBarInputWrapper = styled.div`
 `;
 
 const DetailSearchButton = styled.button`
-    margin-bottom: auto;
+    color: #8d94a0;
+    border: 1px solid #8d94a0;
+    padding: 5px 10px;
+    height: 35px;
+    line-height: 17px;
+    :hover {
+        border: 1px solid #8d94a0;
+    }
 `;
 
 const SearchList = styled.div`
@@ -81,6 +88,7 @@ const SearchList = styled.div`
     color: #8d94a0;
     justify-content: space-between;
     margin-top: -20px;
+    cursor: pointer;
     svg {
         color: #222222;
     }
@@ -120,6 +128,7 @@ const StyledStack = styled(Stack)`
 const PAGE_SIZE = 10;
 
 const SearchPage = () => {
+    const inputRef = useRef<HTMLInputElement | null>(null);
     const [search, setSearch] = useState('');
     const [page, setPage] = useState(1);
     const [searchHistory, setSearchHistory] = useState(getSearchHistory());
@@ -159,6 +168,7 @@ const SearchPage = () => {
                 <SearchBarInputWrapper>
                     <SearchIcon />
                     <input
+                        ref={inputRef}
                         placeholder="검색어를 입력하세요"
                         onKeyDown={onKeyDown}
                         value={inputValue}
@@ -172,13 +182,15 @@ const SearchPage = () => {
                                 return (
                                     <SearchList>
                                         <span
-                                            onMouseDown={(e) => e.preventDefault()}
-                                            onClick={() => {
+                                            onMouseDown={(e) => {
+                                                e.preventDefault();
                                                 setInputValue(it);
                                                 setSearch(it);
                                                 setIsOpenHistory(false);
                                                 addSearchHistory(it);
                                                 setSearchHistory(getSearchHistory());
+
+                                                inputRef.current?.blur();
                                             }}
                                         >
                                             {it}
