@@ -86,6 +86,7 @@ const FavoriteButton = styled.div<{ isClicked?: boolean }>`
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
     > svg {
         width: ${(props) => !props.isClicked && '13px'};
         height: ${(props) => !props.isClicked && '12px'};
@@ -133,7 +134,7 @@ const DividerLine = styled.div`
 
 type BookItemProps = {
     book: BookList;
-    handleChange: () => void;
+    handleChange?: () => void;
 };
 
 const BookItem = ({ book, handleChange }: BookItemProps) => {

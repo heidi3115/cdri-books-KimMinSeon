@@ -124,7 +124,7 @@ const SearchPage = () => {
                 {hasResults ? (
                     <div>
                         {data.documents.map((it: BookList) => {
-                            return <BookItem book={it} />;
+                            return <BookItem key={it.isbn} book={it} />;
                         })}
                     </div>
                 ) : (
