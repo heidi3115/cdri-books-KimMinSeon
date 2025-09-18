@@ -1,9 +1,10 @@
 import styled from '@emotion/styled';
 import bookIcon from '../assets/icon_book.png';
-import BookItem from './BookItem.tsx';
+import BookItem from '../components/BookItem.tsx';
 import { getFavorites } from '../utils/favoriteStorage.ts';
 import type { BookList } from '../types/SearchDataTypes.ts';
 import { useEffect, useState } from 'react';
+import { Pagination, Stack } from '@mui/material';
 
 const Wrapper = styled.div`
     margin-top: 50px;
@@ -49,8 +50,18 @@ const NoResults = styled.div`
     align-items: center;
 `;
 
+const StyledStack = styled(Stack)`
+    margin: 0 auto;
+`;
+
+const PAGE_SIZE = 10;
+
 const FavoritesPage = () => {
     const [favorites, setFavorites] = useState([]);
+    const [page, setPage] = useState(1);
+
+    // 찜목록을 PAGE_SIZE로 나누어 pagination 처리
+    const paginated = favorites.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
     const hasResults = favorites.length > 0;
 
     useEffect(() => {
@@ -59,6 +70,9 @@ const FavoritesPage = () => {
 
     const handleChange = () => {
         setFavorites(getFavorites());
+    };
+    const handlePageChange = (_: any, value: number) => {
+        setPage(value);
     };
 
     return (
@@ -73,7 +87,7 @@ const FavoritesPage = () => {
             <Contents hasResults={hasResults}>
                 {hasResults ? (
                     <>
-                        {favorites.map((it: BookList) => {
+                        {paginated.map((it: BookList) => {
                             return <BookItem book={it} key={it.isbn} handleChange={handleChange} />;
                         })}
                     </>
@@ -84,6 +98,16 @@ const FavoritesPage = () => {
                     </NoResults>
                 )}
             </Contents>
+            {favorites.length > 0 && (
+                <StyledStack spacing={2}>
+                    <Pagination
+                        count={Math.ceil(favorites.length / PAGE_SIZE)}
+                        page={page}
+                        shape="rounded"
+                        onChange={handlePageChange}
+                    />
+                </StyledStack>
+            )}
         </Wrapper>
     );
 };
