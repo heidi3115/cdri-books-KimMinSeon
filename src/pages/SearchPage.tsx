@@ -14,6 +14,7 @@ import {
 } from '../utils/searchHistoryStorage.ts';
 import CommonPopOver from '../components/CommonPopOver.tsx';
 import { PAGE_SIZE } from '../constants/commonConstants.ts';
+import LoadingCircle from '../components/LoadingCircle.tsx';
 
 type ReturnFunctionProps = {
     selectedTarget: string;
@@ -138,7 +139,7 @@ const SearchPage = () => {
     const handleChange = (_: any, value: number) => {
         setPage(value);
     };
-    const { data } = useBookSearch(search, page, PAGE_SIZE, target);
+    const { data, isLoading, isError } = useBookSearch(search, page, PAGE_SIZE, target);
     const hasResults = data && data.documents.length > 0;
 
     const onKeyDown = (e: any) => {
@@ -164,6 +165,25 @@ const SearchPage = () => {
     const handleDetailSearch = ({ selectedTarget, searchText }: ReturnFunctionProps) => {
         setTarget(selectedTarget);
         setSearch(searchText);
+    };
+
+    const renderContents = () => {
+        if (isLoading) return <LoadingCircle />;
+        if (isError) return <div>검색 중 오류가 발생했습니다.</div>;
+        if (hasResults)
+            return (
+                <div>
+                    {data.documents.map((it: BookList) => {
+                        return <BookItem key={it.isbn} book={it} />;
+                    })}
+                </div>
+            );
+        return (
+            <NoResults>
+                <img src={bookIcon} alt="책 아이콘" />
+                <span>검색된 결과가 없습니다.</span>
+            </NoResults>
+        );
     };
 
     return (
@@ -223,20 +243,7 @@ const SearchPage = () => {
                     총<ColoredText>{hasResults ? data.meta.total_count : 0}</ColoredText>건
                 </span>
             </BookCount>
-            <Contents hasResults={hasResults}>
-                {hasResults ? (
-                    <div>
-                        {data.documents.map((it: BookList) => {
-                            return <BookItem key={it.isbn} book={it} />;
-                        })}
-                    </div>
-                ) : (
-                    <NoResults>
-                        <img src={bookIcon} alt="책 아이콘" />
-                        <span>검색된 결과가 없습니다.</span>
-                    </NoResults>
-                )}
-            </Contents>
+            <Contents hasResults={hasResults}>{renderContents()}</Contents>
             {data && data.meta.total_count > 0 && (
                 <StyledStack spacing={2}>
                     <Pagination
