@@ -6,6 +6,12 @@ import bookIcon from '../assets/icon_book.png';
 import SearchIcon from '../assets/SearchIcon.tsx';
 import BookItem from './BookItem.tsx';
 import { Pagination, Stack } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import {
+    addSearchHistory,
+    getSearchHistory,
+    deleteSearchHistory,
+} from '../utils/searchHistoryStorage.ts';
 
 const Wrapper = styled.div`
     margin-top: 50px;
@@ -46,13 +52,27 @@ const SearchBarInputWrapper = styled.div`
         height: 50px;
         border-radius: 50px;
         border: none;
+        font-size: 16px;
         background: #f2f4f6;
         padding: 0 10px 0 50px;
     }
-    svg {
+    > svg {
         position: absolute;
         top: 10px;
         left: 10px;
+    }
+`;
+
+const SearchList = styled.div`
+    background: #f2f4f6;
+    border-radius: 0 0 20px 20px;
+    padding: 20px 20px 5px 50px;
+    display: flex;
+    color: #8d94a0;
+    justify-content: space-between;
+    margin-top: -20px;
+    svg {
+        color: #222222;
     }
 `;
 
@@ -92,16 +112,26 @@ const PAGE_SIZE = 10;
 const SearchPage = () => {
     const [search, setSearch] = useState('');
     const [page, setPage] = useState(1);
-    const handleChange = (_, value: number) => {
+    const [searchHistory, setSearchHistory] = useState(getSearchHistory());
+    const [isOpenHistory, setIsOpenHistory] = useState(false);
+
+    const handleChange = (_: any, value: number) => {
         setPage(value);
     };
     const { data } = useBookSearch(search, page, PAGE_SIZE);
     const hasResults = data && data.documents.length > 0;
 
-    const onKeyDown = (e) => {
+    const onKeyDown = (e: any) => {
         if (e.key === 'Enter') {
             setSearch(e.target.value);
+            setIsOpenHistory(false);
+            addSearchHistory(e.target.value);
+            setSearchHistory(getSearchHistory());
         }
+    };
+    const onClickCloseButton = (it: string) => {
+        deleteSearchHistory(it);
+        setSearchHistory(getSearchHistory());
     };
 
     return (
@@ -110,7 +140,31 @@ const SearchPage = () => {
             <SearchBar>
                 <SearchBarInputWrapper>
                     <SearchIcon />
-                    <input placeholder="검색어를 입력하세요" onKeyDown={onKeyDown} />
+                    <input
+                        placeholder="검색어를 입력하세요"
+                        onKeyDown={onKeyDown}
+                        onFocus={() => setIsOpenHistory(true)}
+                        onBlur={() => setIsOpenHistory(false)}
+                    />
+                    {isOpenHistory && (
+                        <div>
+                            {searchHistory.map((it: string) => {
+                                return (
+                                    <SearchList>
+                                        <span>{it}</span>
+                                        <span>
+                                            <CloseIcon
+                                                onMouseDown={(e) => {
+                                                    e.preventDefault();
+                                                    onClickCloseButton(it);
+                                                }}
+                                            />
+                                        </span>
+                                    </SearchList>
+                                );
+                            })}
+                        </div>
+                    )}
                 </SearchBarInputWrapper>
                 <button>상세검색</button>
             </SearchBar>

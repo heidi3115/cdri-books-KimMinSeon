@@ -1,5 +1,6 @@
 import type { BookList } from '../types/SearchDataTypes.ts';
 
+// 찜하기 목록 가져오기
 export const getFavorites = () => {
     try {
         const saved = localStorage.getItem('favoriteBooks');
@@ -10,6 +11,7 @@ export const getFavorites = () => {
     }
 };
 
+// 찜하기 목록 업데이트
 export const updateFavorites = (list: BookList) => {
     try {
         localStorage.setItem('favoriteBooks', JSON.stringify(list));
