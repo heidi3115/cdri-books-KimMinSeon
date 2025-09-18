@@ -8,6 +8,9 @@ const GlobalStyles = css`
     textarea:focus {
         outline: none;
     }
+    .MuiPopover-paper {
+        box-shadow: 0 0 14px 6px #97979726 !important;
+    }
 `;
 
 function App() {

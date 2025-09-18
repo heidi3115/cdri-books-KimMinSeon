@@ -12,6 +12,12 @@ import {
     getSearchHistory,
     deleteSearchHistory,
 } from '../utils/searchHistoryStorage.ts';
+import CommonPopOver from '../components/CommonPopOver.tsx';
+
+type ReturnFunctionProps = {
+    selectedTarget: string;
+    searchText: string;
+};
 
 const Wrapper = styled.div`
     margin-top: 50px;
@@ -61,6 +67,10 @@ const SearchBarInputWrapper = styled.div`
         top: 10px;
         left: 10px;
     }
+`;
+
+const DetailSearchButton = styled.button`
+    margin-bottom: auto;
 `;
 
 const SearchList = styled.div`
@@ -115,15 +125,17 @@ const SearchPage = () => {
     const [searchHistory, setSearchHistory] = useState(getSearchHistory());
     const [isOpenHistory, setIsOpenHistory] = useState(false);
     const [inputValue, setInputValue] = useState('');
+    const [target, setTarget] = useState<string | undefined>();
 
     const handleChange = (_: any, value: number) => {
         setPage(value);
     };
-    const { data } = useBookSearch(search, page, PAGE_SIZE);
+    const { data } = useBookSearch(search, page, PAGE_SIZE, target);
     const hasResults = data && data.documents.length > 0;
 
     const onKeyDown = (e: any) => {
         if (e.key === 'Enter') {
+            setTarget(undefined);
             setSearch(inputValue);
             setIsOpenHistory(false);
             addSearchHistory(inputValue);
@@ -133,6 +145,11 @@ const SearchPage = () => {
     const onClickCloseButton = (it: string) => {
         deleteSearchHistory(it);
         setSearchHistory(getSearchHistory());
+    };
+
+    const handleDetailSearch = ({ selectedTarget, searchText }: ReturnFunctionProps) => {
+        setTarget(selectedTarget);
+        setSearch(searchText);
     };
 
     return (
@@ -180,7 +197,11 @@ const SearchPage = () => {
                         </div>
                     )}
                 </SearchBarInputWrapper>
-                <button>상세검색</button>
+                <CommonPopOver
+                    target={target}
+                    trigger={<DetailSearchButton>상세검색</DetailSearchButton>}
+                    returnFunction={handleDetailSearch}
+                />
             </SearchBar>
             <BookCount>
                 <span>도서 검색 결과</span>
