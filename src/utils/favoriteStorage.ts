@@ -1,7 +1,7 @@
 import type { BookList } from '../types/SearchDataTypes.ts';
 
 // 찜하기 목록 가져오기
-export const getFavorites = () => {
+export const getFavorites = (): BookList[] => {
     try {
         const saved = localStorage.getItem('favoriteBooks');
         return saved ? JSON.parse(saved) : [];
@@ -12,7 +12,7 @@ export const getFavorites = () => {
 };
 
 // 찜하기 목록 업데이트
-export const updateFavorites = (list: BookList) => {
+export const updateFavorites = (list: BookList[]) => {
     try {
         localStorage.setItem('favoriteBooks', JSON.stringify(list));
     } catch (e) {
@@ -25,7 +25,7 @@ export const isFavorite = (isbn: string) => {
     return favorites.some((book) => book.isbn === isbn);
 };
 
-export const toggleFavorite = (bookData) => {
+export const toggleFavorite = (bookData: BookList) => {
     const favorites = getFavorites();
 
     if (favorites.some((book) => book.isbn === bookData.isbn)) {
