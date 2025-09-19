@@ -28,6 +28,7 @@
 │   ├── assets
 │   │    └─ icon_book.png             # 결과 없을 시 책 아이콘
 │   ├── components
+│   │    ├─ Icons                     # 아이콘 디렉토리
 │   │    ├─ BookItem.tsx              # 검색 결과 개별 도서 컴포넌트
 │   │    ├─ CommonPopOver.tsx         # 상세 검색 팝오버 컴포넌트
 │   │    └─ LoadingCircle.tsx         # 로딩 표시 컴포넌트
