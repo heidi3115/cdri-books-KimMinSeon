@@ -3,7 +3,7 @@ import { useRef, useState } from 'react';
 import styled from '@emotion/styled';
 import type { BookList } from '../types/SearchDataTypes.ts';
 import bookIcon from '../assets/icon_book.png';
-import SearchIcon from '../assets/SearchIcon.tsx';
+import SearchIcon from '../components/Icons/SearchIcon.tsx';
 import BookItem from '../components/BookItem.tsx';
 import { Pagination, Stack } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';

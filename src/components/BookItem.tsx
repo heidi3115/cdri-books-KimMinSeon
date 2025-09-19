@@ -3,9 +3,10 @@ import styled from '@emotion/styled';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import type { BookList } from '../types/SearchDataTypes.ts';
-import { Favorite, FavoriteBorder } from '@mui/icons-material';
 import { useEffect, useState } from 'react';
 import { isFavorite, toggleFavorite } from '../utils/favoriteStorage.ts';
+import FavoriteIcon from './Icons/FavoriteIcon.tsx';
+import FavoriteOutLineIcon from './Icons/FavoriteOutLineIcon.tsx';
 
 const Item = styled.div`
     > ul {
@@ -164,7 +165,7 @@ const BookItem = ({ book, handleChange }: BookItemProps) => {
                                 <ItemImg src={book.thumbnail} />
                                 {isFav && (
                                     <FavoriteButton>
-                                        <Favorite />
+                                        <FavoriteIcon />
                                     </FavoriteButton>
                                 )}
                             </Thumbnail>
@@ -193,7 +194,7 @@ const BookItem = ({ book, handleChange }: BookItemProps) => {
                             <Thumbnail>
                                 <ItemImg src={book.thumbnail} isClicked />
                                 <FavoriteButton isClicked onClick={handleFavoriteClick}>
-                                    {isFav ? <Favorite /> : <FavoriteBorder />}
+                                    {isFav ? <FavoriteIcon /> : <FavoriteOutLineIcon />}
                                 </FavoriteButton>
                             </Thumbnail>
                             <div>
